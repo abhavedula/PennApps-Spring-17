@@ -12,11 +12,12 @@ public class Ngram {
         this.n = n;
     }
 
-    private void tokenize(String text) {
+    private String[] tokenize(String text) {
         String punctuations = "`~!@#$%^&*()_+{}|:\"<>?-=[];'.\\/,";
         for (char punc : punctuations.toCharArray()) {
             text = text.replace(punc, ' ');
         }
+        return text.split("\\s+");
     }
 
     private double prob(String context, String token){
@@ -41,4 +42,3 @@ public class Ngram {
 
 
 }
-
