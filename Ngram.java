@@ -5,16 +5,6 @@ package com.example.victoria.myapplication;
  */
 
 public class Ngram {
-    
-    private class Tuple<S, T> {
-        public final S x;
-        public final T y;
-        
-        public Tuple(S x, T y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
 
     private final int n;
 
@@ -23,28 +13,32 @@ public class Ngram {
     }
 
     private void tokenize(String text) {
-        //for ()
+        String punctuations = "`~!@#$%^&*()_+{}|:\"<>?-=[];'.\\/,";
+        for (char punc : punctuations.toCharArray()) {
+            text = text.replace(punc, ' ');
+        }
     }
-    
-    private int prob(this, context, token){
+
+    private double prob(String context, String token){
         Tuple<String, String> ct = new Tuple(context, token);
-        float returned;
-        if(this.ngrams_count.containsKey(ct)){
-            returned = this.ngrams_count.get(ct)/this.contex_count.get(context);
-            return returned;
+        if(ngrams_count.containsKey(ct)){
+            return ngrams_count.get(ct)/contex_count.get(context);
         }
         else{
             return 0;
         }
     }
-    
-    
 
-    if (context, token) in self.ngrams_count:
-        return float(self.ngrams_count[(context, token)]) / self.context_count[context]
-        else:
-            return 0
+    private class Tuple<S, T> {
+        private final S x;
+        private final T y;
 
-            
+        public Tuple(S x, T y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
 
 }
+
