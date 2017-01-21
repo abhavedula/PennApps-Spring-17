@@ -17,7 +17,7 @@ public class Ngram {
     private Map<List<String>, List<String>> contextToTokens;
     private Map<Tuple<List<String>, String>, Integer> ngramCount;
 
-    public Ngram(String corpus, int n) {
+    public Ngram(int n) {
         this.n = n;
         contextCount = new HashMap<>();
         contextToTokens = new HashMap<>();
