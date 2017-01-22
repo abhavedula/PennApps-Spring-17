@@ -79,8 +79,8 @@ public class Ngram {
 
     private double prob(String context, String token){
         Tuple<String, String> ct = new Tuple(context, token);
-        if(ngrams_count.containsKey(ct)){
-            return ngrams_count.get(ct)/contex_count.get(context);
+        if(ngramCount.containsKey(ct)){
+            return ngramCount.get(ct)/contextCount.get(context);
         }
         else{
             return 0;
