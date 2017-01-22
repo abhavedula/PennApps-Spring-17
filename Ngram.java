@@ -59,6 +59,12 @@ public class Ngram {
         l.add(new Tuple<List<String>, String>(context , "<END>"));
         return l;
     }
+
+    public String getCorrected(String in) {
+        String corrected = "";
+
+        return corrected;
+    }
     
     private String randomToken(List<String> context) {
         if (! contextCount.containsKey(context)) {

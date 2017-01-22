@@ -9,13 +9,11 @@ import com.example.victoria.myapplication.Ngram;
 
 public class CreateNgramModel {
 
-    public static Ngram readFromFile(String path) {
+    public static Ngram readFromFile(BufferedReader reader) {
         Ngram ngram = null;
-        BufferedReader reader = null;
         try {
 
           // read everything
-          reader = new BufferedReader(new FileReader(path));
           ArrayList<String> sentences = new ArrayList<>();
           String sentence = reader.readLine();
 

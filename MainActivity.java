@@ -18,6 +18,11 @@ import android.view.textservice.SuggestionsInfo;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends Activity implements SpellCheckerSessionListener  {
@@ -33,7 +38,10 @@ public class MainActivity extends Activity implements SpellCheckerSessionListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ngram = CreateNgramModel.readFromFile(""); // TODO
+        InputStream is = this.getResources().openRawResource(R.raw.text);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+
+        ngram = CreateNgramModel.readFromFile(reader); // TODO
         corrected = "";
 
         b1=(Button)findViewById(R.id.button);
@@ -56,6 +64,10 @@ public class MainActivity extends Activity implements SpellCheckerSessionListene
 
             }
         });
+    }
+
+    public String getCorr() {
+        return corrected;
     }
 
     public void onResume() {
@@ -98,12 +110,16 @@ public class MainActivity extends Activity implements SpellCheckerSessionListene
     @Override
     public void onGetSentenceSuggestions(SentenceSuggestionsInfo[] results) {
         final StringBuffer sb = new StringBuffer("");
+        final StringBuffer corr = new StringBuffer("");
+        final List<String> list = new LinkedList<>();
         for(SentenceSuggestionsInfo result:results){
             int n = result.getSuggestionsCount();
             for(int i=0; i < n; i++){
                 int m = result.getSuggestionsInfoAt(i).getSuggestionsCount();
+
                 if((result.getSuggestionsInfoAt(i).getSuggestionsAttributes() &
                         SuggestionsInfo.RESULT_ATTR_LOOKS_LIKE_TYPO) != SuggestionsInfo.RESULT_ATTR_LOOKS_LIKE_TYPO ) {
+                    list.add(result.getSuggestionsInfoAt(i).getSuggestionAt(0)); // TO CHECK
                     continue;
                 }
 
@@ -115,8 +131,13 @@ public class MainActivity extends Activity implements SpellCheckerSessionListene
                     sugg[k] = result.getSuggestionsInfoAt(i).getSuggestionAt(k);
                 }
                 sb.append("\n");
+                list.add(ngram.getMostLikelySugg(list, sugg));
             }
         }
+        for (String str : list) {
+            corr.append(str).append(" ");
+        }
+        corrected = corr.toString();
         runOnUiThread(new Runnable() {
             public void run() {
                 tv1.append(sb.toString());
