@@ -17,7 +17,7 @@ public class Ngram {
     private Map<List<String>, List<String>> contextToTokens;
     private Map<Tuple<List<String>, String>, Integer> ngramCount;
 
-    public Ngram(int n) {
+    public Ngram(String corpus, int n) {
         this.n = n;
         contextCount = new HashMap<>();
         contextToTokens = new HashMap<>();
@@ -57,6 +57,26 @@ public class Ngram {
         return l;
     }
 
+    private void update(String sentence) {
+        for (Tuple<List<String>, String> g : ngrams(tokenize(sentence))) {
+            if (ngramCount.containsKey(g)) {
+                contextCount.put(g.x, contextCount.get(g.x) + 1);
+                ngramCount.put(g, ngramCount.get(g) + 1);
+            } else {
+                if (contextCount.containsKey(g.x)) {
+                    contextCount.put(g.x, contextCount.get(g.x) + 1);
+                    ngramCount.put(g, 1);
+                    contextToTokens.get(g.x).add(g.y);
+                } else {
+                    contextCount.put(g.x, 1);
+                    ngramCount.put(g, 1);
+                    List<String> l = new LinkedList<>();
+                    contextToTokens.put(g.x, l);
+                }
+            }
+        }
+    }
+
     private double prob(String context, String token){
         Tuple<String, String> ct = new Tuple(context, token);
         if(ngrams_count.containsKey(ct)){
@@ -74,6 +94,25 @@ public class Ngram {
         public Tuple(S x, T y) {
             this.x = x;
             this.y = y;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Tuple<?, ?> tuple = (Tuple<?, ?>) o;
+
+            if (x != null ? !x.equals(tuple.x) : tuple.x != null) return false;
+            return y != null ? y.equals(tuple.y) : tuple.y == null;
+
+        }
+
+        @Override
+        public int hashCode() {
+            int result = x != null ? x.hashCode() : 0;
+            result = 31 * result + (y != null ? y.hashCode() : 0);
+            return result;
         }
     }
 
