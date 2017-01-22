@@ -13,19 +13,19 @@ import java.util.Random;
  */
 
 public class Ngram {
-
+    
     private final int n;
     private Map<List<String>, Integer> contextCount;
     private Map<List<String>, List<String>> contextToTokens;
     private Map<Tuple<List<String>, String>, Integer> ngramCount;
-
+    
     public Ngram(int n) {
         this.n = n;
         contextCount = new HashMap<>();
         contextToTokens = new HashMap<>();
         ngramCount = new HashMap<>();
     }
-
+    
     private String[] tokenize(String text) {
         String punctuations = "`~!@#$%^&*()_+{}|:\"<>?-=[];'.\\/,";
         for (char punc : punctuations.toCharArray()) {
@@ -33,7 +33,7 @@ public class Ngram {
         }
         return text.split("\\s+");
     }
-
+    
     private List<Tuple<List<String>, String>> ngrams(String[] tokens) {
         List<Tuple<List<String>, String>> l = new LinkedList<>();
         for (int i = 0; i < tokens.length; i++) {
@@ -58,20 +58,31 @@ public class Ngram {
         l.add(new Tuple<List<String>, String>(context , "<END>"));
         return l;
     }
-
+    
     private String randomToken(List<String> context) {
         if (! contextCount.containsKey(context)) {
             return "";
         }
         double r = (new Random()).nextDouble();
+        
+        int currentSum = 0;
+        
+        for(int i = 0; i < contextToTokens.get(context).size(); i++){
+            currentSum += prob(context, contextToTokens.get(context).get(i));
+            if(currentSum > r){
+                return contextToTokens.get(context).get(i);
+            }
+        }
+        
+        
     }
-
+    
     public String randomText(int tokenCount){
         List<String> context = new ArrayList<String>();
         for(int i = 0; i< n-1; i++){
             context.add("<START>");
         }
-
+        
         String text = "";
         for(int i = 0; i < tokenCount; i++) {
             String token = randomToken(context);
@@ -91,8 +102,8 @@ public class Ngram {
         }
         return text;
     }
-
-
+    
+    
     public void update(String sentence) {
         for (Tuple<List<String>, String> g : ngrams(tokenize(sentence))) {
             if (ngramCount.containsKey(g)) {
@@ -112,9 +123,9 @@ public class Ngram {
             }
         }
     }
-
-    private double prob(String context, String token){
-        Tuple<String, String> ct = new Tuple(context, token);
+    
+    private double prob(List<String> context, String token){
+        Tuple<List<String>, String> ct = new Tuple<>(context, token);
         if(ngramCount.containsKey(ct)){
             return ngramCount.get(ct)/contextCount.get(context);
         }
@@ -122,28 +133,28 @@ public class Ngram {
             return 0;
         }
     }
-
+    
     private class Tuple<S, T> {
         private final S x;
         private final T y;
-
+        
         public Tuple(S x, T y) {
             this.x = x;
             this.y = y;
         }
-
+        
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-
+            
             Tuple<?, ?> tuple = (Tuple<?, ?>) o;
-
+            
             if (x != null ? !x.equals(tuple.x) : tuple.x != null) return false;
             return y != null ? y.equals(tuple.y) : tuple.y == null;
-
+            
         }
-
+        
         @Override
         public int hashCode() {
             int result = x != null ? x.hashCode() : 0;
@@ -151,6 +162,6 @@ public class Ngram {
             return result;
         }
     }
-
-
+    
+    
 }
