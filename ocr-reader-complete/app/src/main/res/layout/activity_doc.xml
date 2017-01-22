@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.google.android.gms.samples.vision.ocrreader.DocActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/tvDocName"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/tvDocText"
+        android:paddingBottom="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:textColor="#40578E"
+        android:id="@+id/tvDocText"
+        android:layout_below="@+id/tvDocName"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Quiz"
+        android:id="@+id/btnQuiz"
+        android:background="#93A5C6"
+        android:onClick="toQuizSets"
+        android:textSize="12sp"
+        android:layout_marginRight="10dp"
+        android:layout_toRightOf="@+id/btnDelete"
+        android:layout_alignParentBottom="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Spell"
+
+        android:background="#93A5C6"
+        android:textSize="12sp"
+        android:onClick="grammar"
+        android:id="@+id/btnSpellcheck"
+        android:layout_toRightOf="@id/btnQuiz"
+        android:layout_alignParentBottom="true"
+/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Feed"
+
+        android:background="#93A5C6"
+        android:textSize="12sp"
+        android:onClick="toFeed"
+        android:id="@+id/btnFeed"
+        android:layout_marginLeft="10dp"
+
+        android:layout_toRightOf="@id/btnSpellcheck"
+        android:layout_alignParentBottom="true"
+        />
+
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/tvCheck"-->
+        <!--android:layout_above="@+id/btnSpellcheck"-->
+        <!--android:layout_toStartOf="@+id/btnSpellcheck"-->
+     <!--/>-->
+
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="delete"-->
+        <!--android:id="@+id/btnDelete"-->
+        <!--android:onClick="delete"-->
+        <!--android:layout_above="@+id/btnQuiz"-->
+        <!--android:layout_alignEnd="@+id/tvDocName" />-->
+
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnDelete"
+        android:onClick="delete"
+        android:src="@drawable/bin"
+
+
+        android:scaleType="fitCenter"
+        android:layout_marginLeft="10dp"
+        android:background="#FFFFFF"
+        android:adjustViewBounds="true"
+        android:layout_alignTop="@+id/btnQuiz"
+        android:layout_alignParentStart="true" />
+
+    <!--<ImageButton-->
+        <!--android:layout_width="150dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/btnSpellcheck"-->
+        <!--android:onClick="delete"-->
+        <!--android:src="@drawable/spellcheck"-->
+
+
+        <!--android:scaleType="fitCenter"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:background="#FFFFFF"-->
+        <!--android:adjustViewBounds="true"-->
+        <!--android:layout_alignTop="@+id/btnDelete"-->
+        <!--android:layout_toEndOf="@+id/tvDocText" />-->
+
+
+</RelativeLayout>

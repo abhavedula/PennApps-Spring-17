@@ -1,0 +1,1 @@
+CHANGED,C:\Users\ramyarao\Downloads\avm\avm\vS\ocr-codelab\ocr-reader-complete\app\build\intermediates\transforms\instantRun\debug\folders\1\5\main\com\google\android\gms\samples\vision\ocrreader\OcrCaptureActivity.class
