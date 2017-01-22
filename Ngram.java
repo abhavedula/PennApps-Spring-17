@@ -17,7 +17,7 @@ public class Ngram {
     private Map<List<String>, List<String>> contextToTokens;
     private Map<Tuple<List<String>, String>, Integer> ngramCount;
 
-    public Ngram(String corpus, int n) {
+    public Ngram(int n) {
         this.n = n;
         contextCount = new HashMap<>();
         contextToTokens = new HashMap<>();
@@ -57,7 +57,7 @@ public class Ngram {
         return l;
     }
 
-    private void update(String sentence) {
+    public void update(String sentence) {
         for (Tuple<List<String>, String> g : ngrams(tokenize(sentence))) {
             if (ngramCount.containsKey(g)) {
                 contextCount.put(g.x, contextCount.get(g.x) + 1);
