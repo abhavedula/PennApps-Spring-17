@@ -1,8 +1,10 @@
 package com.example.victoria.myapplication;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Victoria on 1/21/2017.
@@ -11,9 +13,15 @@ import java.util.List;
 public class Ngram {
 
     private final int n;
+    private Map<List<String>, Integer> contextCount;
+    private Map<List<String>, List<String>> contextToTokens;
+    private Map<Tuple<List<String>, String>, Integer> ngramCount;
 
     public Ngram(String corpus, int n) {
         this.n = n;
+        contextCount = new HashMap<>();
+        contextToTokens = new HashMap<>();
+        ngramCount = new HashMap<>();
     }
 
     private String[] tokenize(String text) {
