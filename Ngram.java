@@ -1,5 +1,6 @@
 package com.example.victoria.myapplication;
 
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -133,6 +134,24 @@ public class Ngram {
             return 0;
         }
     }
+    
+    public String getMostLikelySugg(List<String> context, String[] sugg){
+        if(sugg == null || sugg.length == 0) {
+            return "";
+        }
+        String token = sugg[0];
+        
+        double max = -1;
+        
+        for(int i = 0; i < sugg.length; i++){
+            if(prob(context, sugg[i]) > max) {
+                max = prob(context, sugg[i]);
+                token = sugg[i];
+            }
+        }
+        return token;
+    }
+    
     
     private class Tuple<S, T> {
         private final S x;
