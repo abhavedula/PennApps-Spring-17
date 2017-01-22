@@ -25,11 +25,16 @@ public class MainActivity extends Activity implements SpellCheckerSessionListene
     TextView tv1;
     EditText ed1;
     private SpellCheckerSession mScs;
+    private Ngram ngram;
+    private String corrected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ngram = CreateNgramModel.readFromFile(""); // TODO
+        corrected = "";
 
         b1=(Button)findViewById(R.id.button);
         tv1=(TextView)findViewById(R.id.textView3);
@@ -48,7 +53,7 @@ public class MainActivity extends Activity implements SpellCheckerSessionListene
                 }
 
                 mScs.getSentenceSuggestions(txt, 3);
-                //mScs.getSuggestions(new TextInfo(ed1.getText().toString()), 3);
+
             }
         });
     }
@@ -59,7 +64,6 @@ public class MainActivity extends Activity implements SpellCheckerSessionListene
                 getSystemService(Context.TEXT_SERVICES_MANAGER_SERVICE);
         //mScs = tsm.newSpellCheckerSession(null, null, this, true);
         mScs = tsm.newSpellCheckerSession(null, Locale.ENGLISH, this, false);
-        System.out.println(mScs);
     }
 
     public void onPause() {
@@ -103,9 +107,12 @@ public class MainActivity extends Activity implements SpellCheckerSessionListene
                     continue;
                 }
 
+                String[] sugg = new String[m];
+
                 for(int k=0; k < m; k++) {
                     sb.append(result.getSuggestionsInfoAt(i).getSuggestionAt(k))
                             .append("\n");
+                    sugg[k] = result.getSuggestionsInfoAt(i).getSuggestionAt(k);
                 }
                 sb.append("\n");
             }

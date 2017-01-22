@@ -74,8 +74,7 @@ public class Ngram {
                 return contextToTokens.get(context).get(i);
             }
         }
-        
-        
+        return contextToTokens.get(context).get(contextToTokens.get(context).size() - 1);
     }
     
     public String randomText(int tokenCount){
