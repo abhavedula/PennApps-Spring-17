@@ -132,8 +132,9 @@ public class Ngram {
     
     private double prob(List<String> context, String token){
         Tuple<List<String>, String> ct = new Tuple<>(context, token);
+        System.out.println(context + ", " + ngramCount.containsKey(ct));
         if(ngramCount.containsKey(ct)){
-            return ngramCount.get(ct)/contextCount.get(context);
+            return ((double) ngramCount.get(ct))/contextCount.get(context);
         }
         else{
             return 0;
