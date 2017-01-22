@@ -10,7 +10,7 @@ import com.example.victoria.myapplication.Ngram;
 public class CreateNgramModel {
 
     public static Ngram readFromFile(String path) {
-        Ngram ngram;
+        Ngram ngram = null;
         BufferedReader reader = null;
         try {
 
@@ -44,6 +44,6 @@ public class CreateNgramModel {
           }
         }
 
-        return null;
+        return ngram;
       }
 }
