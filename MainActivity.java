@@ -32,17 +32,21 @@ public class MainActivity extends Activity implements SpellCheckerSessionListene
     private SpellCheckerSession mScs;
     private Ngram ngram;
     private String corrected;
+    private String bestSugg;
+    private boolean hasCorr;
+    private List<String> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        bestSugg = "";
+        hasCorr = false;
 
         InputStream is = this.getResources().openRawResource(R.raw.text);
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 
         ngram = CreateNgramModel.readFromFile(reader); // TODO
-        corrected = "";
 
         b1=(Button)findViewById(R.id.button);
         tv1=(TextView)findViewById(R.id.textView3);
@@ -54,13 +58,26 @@ public class MainActivity extends Activity implements SpellCheckerSessionListene
                 Toast.makeText(getApplicationContext(),
                         ed1.getText().toString(),Toast.LENGTH_SHORT).show();
                 String[] in = ed1.getText().toString().split(" ");
-                TextInfo[] txt = new TextInfo[in.length];
-
-                for (int i = 0; i < txt.length; i++) {
-                    txt[i] = new TextInfo(in[i]);
+                //List<TextInfo[]> input = new LinkedList<>();
+                corrected = "";
+                list = new LinkedList<>();
+                for (int i = 0; i < in.length; i++) {
+                    TextInfo[] txt = new TextInfo[1];
+                    txt[0] = new TextInfo(in[i]);
+                    mScs.getSentenceSuggestions(txt, 3);
+                    if (hasCorr) {
+                        corrected += bestSugg + " ";
+                        list.add(bestSugg);
+                        System.out.println("CORRECTED: " + corrected);
+                    } else {
+                        corrected += in[i] + " ";
+                        list.add(in[i]);
+                    }
+                    //input.add(txt);
+                    System.out.println(corrected);
                 }
 
-                mScs.getSentenceSuggestions(txt, 3);
+
 
             }
         });
@@ -74,7 +91,6 @@ public class MainActivity extends Activity implements SpellCheckerSessionListene
         super.onResume();
         final TextServicesManager tsm = (TextServicesManager)
                 getSystemService(Context.TEXT_SERVICES_MANAGER_SERVICE);
-        //mScs = tsm.newSpellCheckerSession(null, null, this, true);
         mScs = tsm.newSpellCheckerSession(null, Locale.ENGLISH, this, false);
     }
 
@@ -111,7 +127,7 @@ public class MainActivity extends Activity implements SpellCheckerSessionListene
     public void onGetSentenceSuggestions(SentenceSuggestionsInfo[] results) {
         final StringBuffer sb = new StringBuffer("");
         final StringBuffer corr = new StringBuffer("");
-        final List<String> list = new LinkedList<>();
+        hasCorr = false;
         for(SentenceSuggestionsInfo result:results){
             int n = result.getSuggestionsCount();
             for(int i=0; i < n; i++){
@@ -119,10 +135,11 @@ public class MainActivity extends Activity implements SpellCheckerSessionListene
 
                 if((result.getSuggestionsInfoAt(i).getSuggestionsAttributes() &
                         SuggestionsInfo.RESULT_ATTR_LOOKS_LIKE_TYPO) != SuggestionsInfo.RESULT_ATTR_LOOKS_LIKE_TYPO ) {
-                    list.add(result.getSuggestionsInfoAt(i).getSuggestionAt(0)); // TO CHECK
+//                    list.add(result.getSuggestionsInfoAt(i).getSuggestionAt(0)); // TO CHECK
+                    hasCorr = false;
                     continue;
                 }
-
+                hasCorr = true;
                 String[] sugg = new String[m];
 
                 for(int k=0; k < m; k++) {
@@ -131,13 +148,17 @@ public class MainActivity extends Activity implements SpellCheckerSessionListene
                     sugg[k] = result.getSuggestionsInfoAt(i).getSuggestionAt(k);
                 }
                 sb.append("\n");
-                list.add(ngram.getMostLikelySugg(list, sugg));
+                //list.add(ngram.getMostLikelySugg(list, sugg));
+                bestSugg = ngram.getMostLikelySugg(list, sugg); // change to mostlikelysugg later
+                System.out.println("BESTSUGG: " + bestSugg);
             }
         }
+        /**
         for (String str : list) {
             corr.append(str).append(" ");
         }
         corrected = corr.toString();
+         **/
         runOnUiThread(new Runnable() {
             public void run() {
                 tv1.append(sb.toString());

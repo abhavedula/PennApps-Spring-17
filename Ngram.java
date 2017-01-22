@@ -51,7 +51,7 @@ public class Ngram {
         List<String> context = new LinkedList<>();
         for (int i = 0; i < n - 1; i++) {
             if (i < tokens.length) {
-                context.add(0, tokens[-i-1]);
+                context.add(0, tokens[tokens.length-i-1]);
             } else {
                 context.add(0, "<START>");
             }
