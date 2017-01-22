@@ -1,5 +1,5 @@
-package com.example.victoria.myapplication;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -85,6 +85,32 @@ public class Ngram {
         else{
             return 0;
         }
+    }
+
+    public String randomText(int tokenCount){
+        ArrayList<String> context = new ArrayList<String>();
+        for(int i = 0; i< n-1; i++){
+            context.add("<START>");
+        }
+        
+        String text = "";
+        for(int i = 0; i < tokenCount; i++) {
+            String token = randomToken(context);
+               if(text.length() > 0){
+                   text += "";
+               }
+                text += token;
+                if(token.equals("<END>")){
+                    for(int j = 0; j< n-1; j++){
+                        context.add("<START>");
+                    }
+                }
+                else if(n > 1){
+                    context.remove(0);
+                    context.add(token);
+                }
+            }
+        return text;
     }
 
     private class Tuple<S, T> {
