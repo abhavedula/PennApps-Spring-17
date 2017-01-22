@@ -1,3 +1,4 @@
+package com.example.victoria.myapplication;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -5,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by Victoria on 1/21/2017.
@@ -57,6 +59,40 @@ public class Ngram {
         return l;
     }
 
+    private String randomToken(List<String> context) {
+        if (! contextCount.containsKey(context)) {
+            return "";
+        }
+        double r = (new Random()).nextDouble();
+    }
+
+    public String randomText(int tokenCount){
+        List<String> context = new ArrayList<String>();
+        for(int i = 0; i< n-1; i++){
+            context.add("<START>");
+        }
+
+        String text = "";
+        for(int i = 0; i < tokenCount; i++) {
+            String token = randomToken(context);
+            if(text.length() > 0){
+                text += "";
+            }
+            text += token;
+            if(token.equals("<END>")){
+                for(int j = 0; j< n-1; j++){
+                    context.add("<START>");
+                }
+            }
+            else if(n > 1){
+                context.remove(0);
+                context.add(token);
+            }
+        }
+        return text;
+    }
+
+
     public void update(String sentence) {
         for (Tuple<List<String>, String> g : ngrams(tokenize(sentence))) {
             if (ngramCount.containsKey(g)) {
@@ -85,32 +121,6 @@ public class Ngram {
         else{
             return 0;
         }
-    }
-
-    public String randomText(int tokenCount){
-        ArrayList<String> context = new ArrayList<String>();
-        for(int i = 0; i< n-1; i++){
-            context.add("<START>");
-        }
-        
-        String text = "";
-        for(int i = 0; i < tokenCount; i++) {
-            String token = randomToken(context);
-               if(text.length() > 0){
-                   text += "";
-               }
-                text += token;
-                if(token.equals("<END>")){
-                    for(int j = 0; j< n-1; j++){
-                        context.add("<START>");
-                    }
-                }
-                else if(n > 1){
-                    context.remove(0);
-                    context.add(token);
-                }
-            }
-        return text;
     }
 
     private class Tuple<S, T> {
